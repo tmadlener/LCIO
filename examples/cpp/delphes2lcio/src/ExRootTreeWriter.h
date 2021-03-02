@@ -6,8 +6,6 @@
  *  Class handling output ROOT tree
  *
  *  \author P. Demin - UCL, Louvain-la-Neuve
- *  F.Gaede, DESY
- *  added accessor functions setTree() and getTree for delphes2lcio
  *
  */
 
@@ -31,9 +29,11 @@ public:
 
   ExRootTreeBranch *NewBranch(const char *name, TClass *cl);
 
-
-  void  setTree(TTree* t) { fTree = t ; }
-  TTree* getTree() { return fTree ; }
+  // Add a SetTree and GetTree function to be able to access the internal TTree.
+  // This allows us to not have the internal TTree connected to an output file,
+  // while still being able to use it.
+  void SetTree(TTree* t) { fTree = t; }
+  TTree* GetTree() { return fTree; }
 
   void Clear();
   void Fill();

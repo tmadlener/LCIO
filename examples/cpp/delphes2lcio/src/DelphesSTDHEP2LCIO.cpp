@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
     // }
 
     treeWriter = new ExRootTreeWriter(outputFile, "Delphes");
-    treeWriter->setTree( new TTree("Delphes2LCIO","Analysys") ) ; 
+    treeWriter->SetTree( new TTree("Delphes2LCIO","Analysys") ) ;
 
     branchEvent = treeWriter->NewBranch("Event", LHEFEvent::Class());
 
@@ -212,7 +212,7 @@ int main(int argc, char *argv[])
             treeWriter->Fill();
 
 	    // --- changed from original: here we write the tree to LCIO
-	    lcioConverter.writeEvent( treeWriter->getTree() ) ;
+	    lcioConverter.writeEvent( treeWriter->GetTree() ) ;
 
 	    treeWriter->Clear();
           }

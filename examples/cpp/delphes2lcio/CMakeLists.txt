@@ -23,3 +23,21 @@ add_executable(DelphesSTDHEP2LCIO ./src/DelphesSTDHEP2LCIO.cpp ./src/DelphesLCIO
 target_include_directories(DelphesSTDHEP2LCIO PRIVATE ${DELPHES_INCLUDE_DIRS} ${LCIO_INCLUDE_DIRS} ./include)
 target_link_libraries(DelphesSTDHEP2LCIO ${LCIO_LIBRARIES} ${DELPHES_LIBRARY} ROOT::Core ROOT::RIO ROOT::Tree ROOT::Physics  ROOT::GenVector ROOT::MathCore)
 install(TARGETS DelphesSTDHEP2LCIO DESTINATION bin)
+
+add_library(DelphesLCIOConverter SHARED ./src/DelphesLCIOConverter_new.cc)
+target_include_directories(DelphesLCIOConverter
+  SYSTEM PUBLIC ${DELPHES_INCLUDE_DIRS} ${LCIO_INCLUDE_DIRS}
+  PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+  )
+target_link_libraries(DelphesLCIOConverter
+  ${LCIO_LIBRARIES}
+  ${DELPHES_LIBRARY}
+  ROOT::MathCore
+  ROOT::EG
+  ROOT::Physics
+  ROOT::Tree)
+
+add_executable(DelphesSTDHEP_LCIO ./src/DelphesSTDHEP_LCIO.cpp)
+target_link_libraries(DelphesSTDHEP_LCIO DelphesLCIOConverter)
