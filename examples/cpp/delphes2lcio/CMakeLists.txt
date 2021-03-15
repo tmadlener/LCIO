@@ -17,6 +17,7 @@ SET(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 find_package(LCIO)
 find_package(ROOT)
 find_package(Delphes)
+find_package(podio)
 
 # build the executable and put it into bin/
 add_executable(DelphesSTDHEP2LCIO ./src/DelphesSTDHEP2LCIO.cpp ./src/DelphesLCIOConverter.cc ./src/DelphesLCIOConfig.cc)
@@ -39,5 +40,10 @@ target_link_libraries(DelphesLCIOConverter
   ROOT::Physics
   ROOT::Tree)
 
+install(TARGETS DelphesLCIOConverter DESTINATION lib)
+
 add_executable(DelphesSTDHEP_LCIO ./src/DelphesSTDHEP_LCIO.cpp)
-target_link_libraries(DelphesSTDHEP_LCIO DelphesLCIOConverter)
+target_compile_definitions(DelphesSTDHEP_LCIO PRIVATE -DBENCHMARK_INSTRUMENTATION=1)
+target_link_libraries(DelphesSTDHEP_LCIO DelphesLCIOConverter podio::podio)
+
+install(TARGETS DelphesSTDHEP_LCIO DESTINATION bin)
