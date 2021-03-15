@@ -210,6 +210,7 @@ void DelphesLCIOConverter::processTracks(const TClonesArray* delphesCollection, 
     trackCollection->addElement(track);
 
     auto* cand = new lcio::ReconstructedParticleImpl;
+    m_recoParticles->addElement(cand);
     cand->setCharge(delphesCand->Charge);
     const auto momentum = delphesCand->P4();
     cand->setEnergy(momentum.E());
@@ -243,6 +244,7 @@ void DelphesLCIOConverter::processClusters(const TClonesArray* delphesCollection
     // TODO: more info. But not set in k4SimDelhpes either yet
 
     auto* cand = new lcio::ReconstructedParticleImpl;
+    m_recoParticles->addElement(cand);
     cand->setEnergy(delphesCand->E);
     const auto momentum = delphesCand->P4(); // NOTE: assuming massless here!
     const float mom[3] = {(float) momentum.Px(), (float) momentum.Py(), (float) momentum.Pz()};
