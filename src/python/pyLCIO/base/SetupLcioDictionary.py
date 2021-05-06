@@ -26,8 +26,8 @@ def setupLcioDictionary():
     print('Loading LCIO ROOT dictionaries ...')
     try:
         # First try via ROOT and automatic lookup on LD_LIBRARY_PATH
-        try_load_lib('liblcio.so')
-        try_load_lib('liblcioDict.so')
+        try_load_lib('liblcio')  # ROOT can figure out the ending
+        try_load_lib('liblcioDict')
         return
     except RootDictLoadError:
         pass
@@ -42,12 +42,13 @@ def setupLcioDictionary():
         sys.exit( 2 )
 
     for lib_dir in ['lib', 'lib64']:
-        try:
-            try_load_lib(os.path.join(lcioPath, lib_dir, 'liblcio.so'))
-            try_load_lib(os.path.join(lcioPath, lib_dir, 'liblcioDict.so'))
-            return
-        except RootDictLoadError:
-            pass
+        for suffix in ['so', 'dylib']:
+            try:
+                try_load_lib(os.path.join(lcioPath, lib_dir, 'liblcio.{}'.format(suffix)))
+                try_load_lib(os.path.join(lcioPath, lib_dir, 'liblcioDict.{}'.format(suffix)))
+                return
+            except RootDictLoadError:
+                pass
 
     # If now we are still here, we have a problem
     print('Error loading dictionaries from liblcio.so and liblcioDict.so. Could not find them in lib or lib64 in {}'.format(lcioPath))
