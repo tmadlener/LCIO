@@ -24,41 +24,46 @@ jobs:
               -G Ninja \
               ..
             ninja -k0 install
-      - name: Package install
-        run: |
-          tar -czvf lcio_install.tgz ${GITHUB_WORKSPACE}/install
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: lcio-install-tarball
-          path: lcio_install.tgz
-
-  test:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download build artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: lcio-install-tarball
-          path: lcio_install.tgz
-      - name: Show tarball
-        run: |
-          file lcio_install.tgz
-          ls -lhrt lcio_install.tgz
-          ls -lhrt lcio_install.tgz/*
-          ls -lhrt lcio_install/*
-      - name: Extract tarball
-        run: |
-          tar -xvf lcio_install.tgz
-          ls
-      - uses: cvmfs-contrib/github-action-cvmfs@v2
-      - uses: aidasoft/run-lcg-view@v3
-        with:
-          release-platform: "LCG_101/x86_64-centos7-gcc10-opt"
-          run: |
-            export LCIO=/home/runner/work/LCIO/LCIO/install
-            export LD_LIBRARY_PATH=$LCIO/lib64:$LD_LIBRARY_PATH
-            export PYTHONPATH=$LCIO/python:$PYTHONPATH
+            cd ../install
+            source ../setup.sh
+            rm -r $(ls | grep -v install)
             python $LCIO/python/examples/EventBuilder.py test.slcio 1
             python $LCIO/python/examples/readMCParticles.py test.slcio
+      # - name: Package install
+      #   run: |
+      #     tar -czvf lcio_install.tgz ${GITHUB_WORKSPACE}/install
+      # - name: Upload artifact
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: lcio-install-tarball
+      #     path: lcio_install.tgz
+
+  # test:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Download build artifacts
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: lcio-install-tarball
+  #         path: lcio_install.tgz
+  #     - name: Show tarball
+  #       run: |
+  #         file lcio_install.tgz
+  #         ls -lhrt lcio_install.tgz
+  #         ls -lhrt lcio_install.tgz/*
+  #         ls -lhrt lcio_install/*
+  #     - name: Extract tarball
+  #       run: |
+  #         tar -xvf lcio_install.tgz
+  #         ls
+  #     - uses: cvmfs-contrib/github-action-cvmfs@v2
+  #     - uses: aidasoft/run-lcg-view@v3
+  #       with:
+  #         release-platform: "LCG_101/x86_64-centos7-gcc10-opt"
+  #         run: |
+  #           export LCIO=/home/runner/work/LCIO/LCIO/install
+  #           export LD_LIBRARY_PATH=$LCIO/lib64:$LD_LIBRARY_PATH
+  #           export PYTHONPATH=$LCIO/python:$PYTHONPATH
+  #           python $LCIO/python/examples/EventBuilder.py test.slcio 1
+  #           python $LCIO/python/examples/readMCParticles.py test.slcio
