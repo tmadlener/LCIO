@@ -26,7 +26,9 @@ jobs:
             ninja -k0 install
             cd ../install
             source ../setup.sh
-            rm -r $(ls | grep -v install)
+            rm -r $(ls ../ | grep -v install)
+            ls ../
+            ls
             python $LCIO/python/examples/EventBuilder.py test.slcio 1
             python $LCIO/python/examples/readMCParticles.py test.slcio
       # - name: Package install
