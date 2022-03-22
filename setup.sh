@@ -4,8 +4,12 @@
 # initialize the current LCIO version by sourcing this in the top level directory
 #
 
-export LCIO=`pwd`
+export LCIO=$(pwd)
 export PATH=$LCIO/bin:$LCIO/tools:$PATH
-export LD_LIBRARY_PATH=$LCIO/lib:$LCIO/lib64:$LD_LIBRARY_PATH
+for d in lib lib64; do
+    if [ -d ${LCIO}/${d} ]; then
+        export LD_LIBRARY_PATH=${LCIO}/${d}:${LD_LIBRARY_PATH}
+    fi
+done
 export PYTHONPATH=$LCIO/src/python:$PYTHONPATH
 alias pylcio='python $LCIO/src/python/pylcio.py'
