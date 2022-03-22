@@ -27,7 +27,10 @@ jobs:
             cd ../install
             source ../setup.sh
             cd ../
+            set -x
             rm -r $(ls | grep -v install)
+            set +x
+            ls $LCIO
             cd install
             python $LCIO/python/examples/EventBuilder.py test.slcio 1
             python $LCIO/python/examples/readMCParticles.py test.slcio
