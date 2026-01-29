@@ -104,7 +104,7 @@ namespace MT {
     /// The output file stream
     std::ofstream                               _stream {} ;
     /// The compression level
-    std::atomic<unsigned int>                   _maxBufferSize {2*1204*1024} ;
+    std::atomic<std::size_t>                   _maxBufferSize {4*1204*1024} ;
     /// The compression level
     std::atomic<int>                            _compressionLevel {-1} ;
     /// The random access manager for event/run random access in the file
